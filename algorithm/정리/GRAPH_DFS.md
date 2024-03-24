@@ -25,3 +25,7 @@ for (int i = 0; i < v.size(); i++)
   cout << v[i] << " ";
 vector.pop_back() : vector의 맨 뒤의 data를 삭제
 v.pop_back();
+
+## DFS
+- 특정 점으로부터 여러개의 간선을 통해 갈 수 있는 점 찾기
+- 깊이 우선 탐색
