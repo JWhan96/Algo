@@ -61,31 +61,29 @@ int main() {
     input();
     parseNumArr();
     sol();
-    if (!result) {
-      if (!dq.empty() && reverse_flag == false) {
-        cout << "[";
-        for (int i = 0; i < dq.size(); i++) {
-          cout << dq[i];
-          if (i < dq.size() -
-                      1) {  // 마지막 원소가 아니라면, 콤마와 공백을 추가한다.
-            cout << ",";
-          }
-        }
-        cout << "]";
-      } else if (!dq.empty() && reverse_flag == true) {
-        cout << "[";
-        for (int i = dq.size() - 1; i >= 0; i--) {
-          cout << dq[i];
-          if (i > 0) {  // 마지막 원소가 아니라면, 콤마와 공백을 추가한다.
-            cout << ",";
-          }
-        }
-        cout << "]";
-      } else {
-        cout << "["
-             << "]";
-      }
 
+    if (result == false && !dq.empty() && reverse_flag == false) {
+      cout << "[";
+      for (int i = 0; i < dq.size(); i++) {
+        cout << dq[i];
+        if (i <
+            dq.size() - 1) {  // 마지막 원소가 아니라면, 콤마와 공백을 추가한다.
+          cout << ",";
+        }
+      }
+      cout << "]";
+    } else if (result == false && !dq.empty() && reverse_flag == true) {
+      cout << "[";
+      for (int i = dq.size() - 1; i >= 0; i--) {
+        cout << dq[i];
+        if (i > 0) {  // 마지막 원소가 아니라면, 콤마와 공백을 추가한다.
+          cout << ",";
+        }
+      }
+      cout << "]";
+    } else if (result == false && dq.empty()) {
+      cout << "["
+           << "]";
     } else {
       cout << "error";
     }
