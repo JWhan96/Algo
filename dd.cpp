@@ -1,41 +1,50 @@
+#include <algorithm>
+#include <cstring>
 #include <iostream>
-#include <string>
-
+#include <queue>
+#include <vector>
 using namespace std;
 
+int cntNode, cntEdge, startNode;
+queue<int> q;
+vector<int> arr[100001];
+int visited[100001];
+int cnt;
+
 int main() {
-  ios::sync_with_stdio(false);
-  cin.tie(NULL);
-  string a, bomb;
-  string st = "";
-  cin >> a >> bomb;
-  int a_len = a.size();
-  int bomb_len = bomb.size();
-  int st_len = st.size();
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
 
-  for (int i = 0; i < a.size(); i++) {
-    st += a[i];  // 문자 추가
-    // 임시 문자 길이가 폭발 문자열 보다 크거나 같을 때
-    if (st.size() >= bomb.size()) {
-      // cout << st << endl;
-      bool flag = true;  // 폭발 문자열 있는지 확인하는 flag
-      for (int j = 0; j < bomb.size(); j++) {
-        if (st[st.size() - bomb.size() + j] != bomb[j]) {
-          flag = false;
-          break;
-        }  // t뒤에서 폭발 문자열 길이만큼 비교
+  cin >> cntNode >> cntEdge >> startNode;
+  for (int i = 0; i < cntEdge; i++) {
+    int from, to;
+    cin >> from >> to;
+    arr[from].push_back(to);
+    arr[to].push_back(from);
+  }
+  for (int i = 1; i <= cntNode; i++) {
+    sort(arr[i].begin(), arr[i].end());
+  }
+  cnt++;
+  q.push(startNode);
+  visited[startNode] = cnt;
+
+  while (!q.empty()) {
+    int now = q.front();
+    q.pop();
+    for (int i = 0; i < arr[now].size(); i++) {
+      int next = arr[now][i];
+      if (visited[next] != 0) {
+        continue;
       }
-
-      if (flag)  // 폭발 문자열일 경우 삭제
-                 // st.erase(st.end() - bomb.size(), st.end());
-        for (int i = 0; i < bomb.size(); i++) {
-          st.pop_back();
-        }
+      cnt++;
+      q.push(next);
+      visited[next] = cnt;
     }
   }
-  if (st.empty())  // 남아 있는 문자열이 없는 경우
-    cout << "FRULA" << '\n';
-  else
-    cout << st << '\n';
+  for (int i = 1; i <= cntNode; i++) {
+    cout << visited[i] << endl;
+  }
   return 0;
 }
