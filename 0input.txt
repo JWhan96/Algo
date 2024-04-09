@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 3
 21 Junkyu
 21 Dohyun
 20 Sunyoung
+=======
+>>>>>>> 94fcc7b7a709a7f4c74b117bfcb4493f7cba0c36
