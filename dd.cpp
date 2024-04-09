@@ -1,50 +1,34 @@
 #include <algorithm>
-#include <cstring>
 #include <iostream>
-#include <queue>
+#include <string>
 #include <vector>
 using namespace std;
 
-int cntNode, cntEdge, startNode;
-queue<int> q;
-vector<int> arr[100001];
-int visited[100001];
-int cnt;
-
+struct p {
+  int age;
+  string name;
+};
+vector<p> arr;
+int n;
+bool compare(const p &a, const p &b) {
+  return a.age < b.age;  // 나이만을 비교
+}
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
-  cout.tie(0);
 
-  cin >> cntNode >> cntEdge >> startNode;
-  for (int i = 0; i < cntEdge; i++) {
-    int from, to;
-    cin >> from >> to;
-    arr[from].push_back(to);
-    arr[to].push_back(from);
+  cin >> n;
+  for (int i = 0; i < n; i++) {
+    int a;
+    string b;
+    cin >> a >> b;
+    arr.push_back({a, b});
   }
-  for (int i = 1; i <= cntNode; i++) {
-    sort(arr[i].begin(), arr[i].end());
-  }
-  cnt++;
-  q.push(startNode);
-  visited[startNode] = cnt;
+  stable_sort(arr.begin(), arr.end(), compare);
 
-  while (!q.empty()) {
-    int now = q.front();
-    q.pop();
-    for (int i = 0; i < arr[now].size(); i++) {
-      int next = arr[now][i];
-      if (visited[next] != 0) {
-        continue;
-      }
-      cnt++;
-      q.push(next);
-      visited[next] = cnt;
-    }
+  for (int i = 0; i < n; i++) {
+    cout << arr[i].age << " " << arr[i].name << '\n';
   }
-  for (int i = 1; i <= cntNode; i++) {
-    cout << visited[i] << endl;
-  }
+
   return 0;
 }
