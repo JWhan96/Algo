@@ -45,28 +45,27 @@ int main() {
     for (int i = 0; i < 4; i++) {
       int nr = row + dr[i];
       int nc = col + dc[i];
-      // if (nr < 1 || nc < 1 || nr > n || nc > m) {
-      //   continue;
-      // }
-      // if (wall == 1 && visited[nr][nc][1] == 1) {
-      //   continue;
-      // }
-      // if (wall == 0) {
-      //   if (arr[nr][nc] == 1 && visited[nr][nc][1] == 1) {
-      //     continue;
-      //   } else if (arr[nr][nc] == 0 && visited[nr][nc][0] == 1) {
-      //     continue;
-      //   }
-      // }
-      if (nr >= 1 && nc >= 1 && nr <= n && nc <= m) {
-        if (arr[nr][nc] == 1 && wall == 0 && visited[nr][nc][1] == 0) {
-          q.push({nr, nc, 1, cnt + 1});
-          visited[nr][nc][1] = 1;
+      if (nr < 1 || nc < 1 || nr > n || nc > m) {
+        continue;
+      }
+      if (wall == 1 && visited[nr][nc][1] == 1) {
+        continue;
+      }
+      if (wall == 0) {
+        if (arr[nr][nc] == 1 && visited[nr][nc][1] == 1) {
+          continue;
+        } else if (arr[nr][nc] == 0 && visited[nr][nc][0] == 1) {
+          continue;
         }
-        if (arr[nr][nc] == 0 && visited[nr][nc][wall] == 0) {
-          q.push({nr, nc, wall, cnt + 1});
-          visited[nr][nc][wall] = 1;
-        }
+      }
+
+      if (arr[nr][nc] == 1 && wall == 0 && visited[nr][nc][1] == 0) {
+        q.push({nr, nc, 1, cnt + 1});
+        visited[nr][nc][1] = 1;
+      }
+      if (arr[nr][nc] == 0 && visited[nr][nc][wall] == 0) {
+        q.push({nr, nc, wall, cnt + 1});
+        visited[nr][nc][wall] = 1;
       }
     }
   }
