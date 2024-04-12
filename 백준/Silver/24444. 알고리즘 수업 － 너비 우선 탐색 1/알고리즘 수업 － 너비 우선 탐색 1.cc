@@ -16,10 +16,10 @@ int main() {
   cin.tie(0);
   cout.tie(0);
 
-  scanf("%d %d %d", &cntNode, &cntEdge, &startNode);
+  cin >> cntNode >> cntEdge >> startNode;
   for (int i = 0; i < cntEdge; i++) {
     int from, to;
-    scanf("%d %d", &from, &to);
+    cin >> from >> to;
     arr[from].push_back(to);
     arr[to].push_back(from);
   }
@@ -44,7 +44,7 @@ int main() {
     }
   }
   for (int i = 1; i <= cntNode; i++) {
-    printf("%d\n", visited[i]);
+    cout << visited[i] << '\n';
   }
   return 0;
 }
