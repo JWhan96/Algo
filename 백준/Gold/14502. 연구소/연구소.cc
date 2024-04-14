@@ -1,94 +1,107 @@
+#include <algorithm>
 #include <iostream>
 #include <queue>
-#include <algorithm>
- 
+#include <stack>
+
 using namespace std;
- 
-int dx[] = {-1,1,0,0};
-int dy[] = {0,0,-1,1};
-int n,m;
-int c=0;
-int map[8][8];
-int tmp[8][8];
- 
-void mapCopy(int (*a)[8], int (*b)[8]){
-    for (int i = 0; i < n; i++) 
-        for (int j = 0; j < m; j++) 
-            a[i][j] = b[i][j];
-} 
- 
-void bfs(){
-    //spread : 3개 벽을 세운 뒤 바이러스가 퍼졌을 때의 연구소
-    int spread[8][8];
-    mapCopy(spread, tmp);
-    queue<pair<int, int>> q;
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            if (spread[i][j] == 2)            //바이러스 있으면 큐에 푸시
-                q.push(make_pair(i, j));    
- 
-    while (!q.empty()) {
-        int x = q.front().first;
-        int y = q.front().second;
-        q.pop();
-        for(int i = 0; i < 4; i++){
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            
-            if(0<=nx && nx<n && 0<=ny && ny<m){
-                if(spread[nx][ny] == 0){
-                    spread[nx][ny] = 2;                    //0이면 2로 바궈서 바이러스 전염되게 함
-                    q.push(make_pair(nx, ny));        //바이러스 있으니까 큐에 푸시
-                }
-            }
-        }
+
+struct pose {
+  int row;
+  int col;
+};
+int arr[9][9];
+int brr[9][9];
+int visit[9][9];
+int cnt;
+int n, m;
+int dr[] = {0, 1, 0, -1};
+int dc[] = {1, 0, -1, 0};
+queue<pose> q;
+int result;
+int c;
+void copy_arr(int (*a)[9], int (*b)[9]) {
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      a[i][j] = b[i][j];
+      // visit[i][j] = 0;
     }
-    //오염되지 않은 부분
-    int cnt = 0;
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < m; j++){
-            if(spread[i][j] == 0)
-                cnt+=1;
-        }
-    }
-    c = max(c, cnt);
+  }
 }
- 
-void wall(int cnt){
-    //벽이 3개 세워졌을 때 bfs, 바이러스 퍼뜨림
-    if(cnt == 3){
-        bfs();
-        return;
+void bfs() {
+  int crr[9][9];
+  copy_arr(crr, brr);
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      if (crr[i][j] == 2) {
+        q.push({i, j});
+      }
     }
-    //벽을 세움
-    for (int i = 0; i < n; i++) 
-        for (int j = 0; j < m; j++) 
-            if(tmp[i][j]==0){
-                tmp[i][j] = 1;
-                wall(cnt+1);
-                //기존의 1을 0으로 바꿔줌
-                tmp[i][j] = 0;
-            }
+  }
+  c = cnt - 3;
+  while (!q.empty()) {
+    int row = q.front().row;
+    int col = q.front().col;
+    q.pop();
+    for (int i = 0; i < 4; i++) {
+      int nr = row + dr[i];
+      int nc = col + dc[i];
+      if (nr < 0 || nc < 0 || nr >= n || nc >= m) {
+        continue;
+      }
+      if (crr[nr][nc] != 0) {
+        continue;
+      }
+      if (crr[nr][nc] == 0) {
+        crr[nr][nc] = 2;
+        c--;
+        q.push({nr, nc});
+      }
+    }
+  }
+
+  result = max(result, c);
 }
- 
-int main(){
-      scanf("%d %d",&n,&m);
- 
-    for(int i = 0; i < n; i++)
-        for(int j = 0; j < m; j++)
-            scanf("%d", &map[i][j]);
- 
-    //0인 부분은 모두 벽을 세워야 함
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            if(map[i][j] == 0){
-                mapCopy(tmp,map);
-                tmp[i][j] =1;
-                wall(1);
-                tmp[i][j] = 0;
-            }
-        }
+
+void wall(int idx) {
+  if (idx == 3) {
+    bfs();
+    return;
+  }
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      if (brr[i][j] == 0) {
+        brr[i][j] = 1;
+        wall(idx + 1);
+        brr[i][j] = 0;
+      }
     }
-    printf("%d\n",c);
- 
+  }
+}
+
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  cin >> n >> m;
+
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      cin >> arr[i][j];
+      if (arr[i][j] == 0) {
+        cnt++;
+      }
+    }
+  }
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      if (arr[i][j] == 0) {
+        copy_arr(brr, arr);
+        brr[i][j] = 1;
+        wall(1);
+        brr[i][j] = 0;
+      }
+    }
+  }
+  cout << result;
+
+  return 0;
 }
