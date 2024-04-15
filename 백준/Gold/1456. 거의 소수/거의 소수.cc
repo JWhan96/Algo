@@ -32,11 +32,17 @@ int main() {
       res = arr[i];
 
       while (arr[i] <= b / res) {
-        if (res * arr[i] >= a) {
+        res *= arr[i];
+        if (res >= a) {
           cnt++;
         }
-        res *= arr[i];
       }
+      // while (arr[i] <= b / res) {
+      //   if (res * arr[i] >= a) {
+      //     cnt++;
+      //   }
+      //   res *= arr[i];
+      // }
     }
   }
   cout << cnt;
