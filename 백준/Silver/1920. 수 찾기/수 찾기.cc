@@ -19,14 +19,11 @@ int main() {
     max_arr = max(arr[i], max_arr);
   }
 
+  sort(arr, arr + n);
   cin >> m;
   for (int j = 0; j < m; j++) {
     cin >> brr[j];
-  }
-  sort(arr, arr + n);
-
-  for (int i = 0; i < m; i++) {
-    if (brr[i] > max_arr) {
+    if (brr[j] > max_arr) {
       cout << 0 << '\n';
       continue;
     }
@@ -36,11 +33,11 @@ int main() {
     while (start <= endd) {
       flag = 0;
       mid = (start + endd) / 2;
-      if (arr[mid] == brr[i]) {
+      if (arr[mid] == brr[j]) {
         cout << 1 << '\n';
         flag = 1;
         break;
-      } else if (arr[mid] > brr[i]) {
+      } else if (arr[mid] > brr[j]) {
         endd = mid - 1;
       } else {
         start = mid + 1;
@@ -50,5 +47,6 @@ int main() {
       cout << 0 << "\n";
     }
   }
+
   return 0;
 }
