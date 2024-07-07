@@ -1,77 +1,82 @@
+#include <algorithm>
 #include <iostream>
 #include <vector>
-#include <unordered_set>
 
 using namespace std;
+// 대표 번호를 0으로?
+int N, M;
+int cntT;
+int cntP;
+int parent[53];
+// int visit[6];
+vector<int> v[53];
+int result;  // 전체 결과값
+// int cnt;     // 파티 하나마다 결과값
+// int found;
 
-int find(vector<int>& parent, int x) {
-    if (parent[x] == x) return x;
-    return parent[x] = find(parent, parent[x]);
+int Find(int A) {
+  if (A == parent[A]) {
+    return A;
+  }
+  int rootA = Find(parent[A]);
+  parent[A] = rootA;
+  return rootA;
 }
 
-void unite(vector<int>& parent, int x, int y) {
-    int rootX = find(parent, x);
-    int rootY = find(parent, y);
-    if (rootX != rootY) {
-        parent[rootY] = rootX;
-    }
+void Union(int A, int B) {
+  int rootA = Find(A);
+  int rootB = Find(B);
+  if (rootA == rootB) return;
+  parent[rootB] = rootA;
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+  ios::sync_with_stdio(0);
+  cin.tie(0);
 
-    int n, m;
-    cin >> n >> m;
+  cin >> N >> M;
+  cin >> cntT;
 
-    vector<int> parent(n + 1);
-    for (int i = 1; i <= n; ++i) {
-        parent[i] = i;
+  for (int i = 0; i <= N; i++) {
+    parent[i] = i;
+  }
+
+  for (int i = 0; i < cntT; i++) {
+    int numT;
+    cin >> numT;
+    Union(0, numT);
+  }
+
+  for (int i = 0; i < M; i++) {
+    cin >> cntP;
+
+    for (int j = 0; j < cntP; j++) {
+      int numP;
+      cin >> numP;
+      v[i].push_back(numP);
     }
-
-    int numTruth;
-    cin >> numTruth;
-    vector<int> truthPeople(numTruth);
-    for (int i = 0; i < numTruth; ++i) {
-        cin >> truthPeople[i];
+    if (!v[i].empty()) {
+      int first_member = v[i][0];
+      for (int k = 0; k < v[i].size(); k++) {
+        Union(first_member, v[i][k]);
+      }
     }
+  }
 
-    vector<vector<int>> parties(m);
-    for (int i = 0; i < m; ++i) {
-        int partySize;
-        cin >> partySize;
-        parties[i].resize(partySize);
-        for (int j = 0; j < partySize; ++j) {
-            cin >> parties[i][j];
-        }
+  for (int i = 0; i < M; i++) {
+    bool flag = true;
+    for (int j = 0; j < v[i].size(); j++) {
+      if (Find(v[i][j]) == Find(0)) {
+        flag = false;
+        break;
+      }
     }
-
-    for (int i = 0; i < m; ++i) {
-        for (int j = 1; j < parties[i].size(); ++j) {
-            unite(parent, parties[i][0], parties[i][j]);
-        }
+    if (flag == true) {
+      result++;
     }
+  }
 
-    unordered_set<int> truthRoots;
-    for (int i = 0; i < numTruth; ++i) {
-        truthRoots.insert(find(parent, truthPeople[i]));
-    }
+  cout << result;
 
-    int count = 0;
-    for (int i = 0; i < m; ++i) {
-        bool canLie = true;
-        for (int j = 0; j < parties[i].size(); ++j) {
-            if (truthRoots.find(find(parent, parties[i][j])) != truthRoots.end()) {
-                canLie = false;
-                break;
-            }
-        }
-        if (canLie) {
-            count++;
-        }
-    }
-
-    cout << count << '\n';
-
-    return 0;
+  return 0;
 }
