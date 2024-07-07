@@ -55,11 +55,10 @@ int main() {
       cin >> numP;
       v[i].push_back(numP);
     }
-    if (!v[i].empty()) {
-      int first_member = v[i][0];
-      for (int k = 0; k < v[i].size(); k++) {
-        Union(first_member, v[i][k]);
-      }
+
+    int first_member = v[i][0];
+    for (int k = 0; k < v[i].size(); k++) {
+      Union(first_member, v[i][k]);
     }
   }
 
