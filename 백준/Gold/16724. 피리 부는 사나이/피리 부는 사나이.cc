@@ -1,86 +1,90 @@
-#include <bits/stdc++.h>
+#include <algorithm>
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
-const int MAX = 1001;
-pair<int, int> parent[MAX][MAX];
-char b[MAX][MAX];
-bool visited[MAX][MAX];
+struct Node {
+  int row;
+  int col;
+  bool operator==(const Node other) const {
+    return row == other.row && col == other.col;
+  }
+  bool operator!=(const Node other) const {
+    return !(row == other.row && col == other.col);
+  }
+};
+int N, M;
+Node parent[1001][1001];
+char arr[1001][1001];
+int visit[1001][1001];
+int cnt;
 
-pair<int, int> Find(pair<int, int> p) {
-    if(parent[p.first][p.second] == p) {
-        return p;
-    }
-    return parent[p.first][p.second] = Find(parent[p.first][p.second]);
+Node Find(Node A) {
+  if (A == parent[A.row][A.col]) {
+    return A;
+  };
+
+  return parent[A.row][A.col] = Find(parent[A.row][A.col]);
+  ;
 }
 
-void Union(pair<int, int> a, pair<int, int> b) {
-    auto pa = Find(a), pb = Find(b);
-
-    if(pa != pb) {
-        parent[pa.first][pa.second] = pb;
-    }
+void Union(Node A, Node B) {
+  Node rootA = Find(A);
+  Node rootB = Find(B);
+  if (rootA == rootB) return;
+  parent[B.row][B.col] = rootA;
 }
 
-void dfs(int r, int c) {
-    visited[r][c] = true;
-
-    int nr = r, nc = c;
-    switch(b[r][c]) {
-        case 'U':
-            nr--;
-            break;
-        case 'D':
-            nr++;
-            break;
-        case 'L':
-            nc--;
-            break;
-        default:
-            nc++;
-    }
-
-    if(Find({r, c}) != Find({nr, nc})) {
-        Union({r, c}, {nr, nc});
-    }
-
-    if(visited[nr][nc]) {
-        return;
-    }
-
-    dfs(nr, nc);
+void DFS(int nowRow, int nowCol) {
+  visit[nowRow][nowCol] = 1;
+  char nowS = arr[nowRow][nowCol];
+  int nr, nc;
+  nr = nowRow;
+  nc = nowCol;
+  if (nowS == 'D') {
+    nr++;
+  } else if (nowS == 'U') {
+    nr--;
+  } else if (nowS == 'L') {
+    nc--;
+  } else if (nowS == 'R') {
+    nc++;
+  }
+  if (Find({nowRow, nowCol}) != Find({nr, nc})) {
+    Union({nr, nc}, {nowRow, nowCol});
+  }
+  if (visit[nr][nc] != 0) return;
+  DFS(nr, nc);
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+  ios::sync_with_stdio(0);
+  cin.tie(0);
 
-    int n, m;
-    cin >> n >> m;
-
-    for(int i = 1; i <= n; i++) {
-        for (int j = 1; j <= m; j++) {
-            cin >> b[i][j];
-            parent[i][j] = {i, j};
-        }
+  cin >> N >> M;
+  // 부모 배열 초기화
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < M; j++) {
+      cin >> arr[i][j];
+      parent[i][j] = {i, j};
     }
-
-    for(int i = 1; i <= n; i++)  {
-        for(int j = 1; j <= m; j++) {
-            if(!visited[i][j]) {
-                dfs(i, j);
-            }
-        }
+  }
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < M; j++) {
+      if (visit[i][j] == 0) {
+        DFS(i, j);
+      }
     }
+  }
 
-    int ans = 0;
-    for(int i = 1; i <= n; i++) {
-        for(int j = 1; j <= m; j++) {
-            ans += (parent[i][j] == make_pair(i, j));
-        }
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < M; j++) {
+      cnt += (parent[i][j] == Node{i, j});
     }
+  }
 
-    cout << ans << '\n';
-    return 0;
+  cout << cnt << '\n';
+
+  return 0;
 }
