@@ -1,96 +1,86 @@
-#include <algorithm>
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-struct Node {
-  int row;
-  int col;
-  bool operator==(const Node other) const {
-    return row == other.row && col == other.col;
-  }
-  bool operator!=(const Node other) const {
-    return !(row == other.row && col == other.col);
-  }
-};
-int N, M;
-Node parent[1001][1001];
-char arr[1001][1001];
-int visit[1001][1001];
-int cnt;
+const int MAX = 1001;
+pair<int, int> parent[MAX][MAX];
+char b[MAX][MAX];
+bool visited[MAX][MAX];
 
-Node Find(Node A) {
-  if (A == parent[A.row][A.col]) {
-    return A;
-  };
-
-  return parent[A.row][A.col] = Find(parent[A.row][A.col]);
-  ;
+pair<int, int> Find(pair<int, int> p) {
+    if(parent[p.first][p.second] == p) {
+        return p;
+    }
+    return parent[p.first][p.second] = Find(parent[p.first][p.second]);
 }
 
-void Union(Node A, Node B) {
-  Node rootA = Find(A);
-  Node rootB = Find(B);
-  if (rootA == rootB) return;
-  parent[B.row][B.col] = rootA;
+void Union(pair<int, int> a, pair<int, int> b) {
+    auto pa = Find(a), pb = Find(b);
+
+    if(pa != pb) {
+        parent[pa.first][pa.second] = pb;
+    }
 }
 
-void DFS(int nowRow, int nowCol) {
-  visit[nowRow][nowCol] = 1;  //  질문 1. 그게 아닌 경우에는 여기서 한번 처리
-  char nowS = arr[nowRow][nowCol];
-  int nr, nc;
-  nr = nowRow;
-  nc = nowCol;
-  if (nowS == 'D') {
-    nr++;
-  } else if (nowS == 'U') {
-    nr--;
-  } else if (nowS == 'L') {
-    nc--;
-  } else if (nowS == 'R') {
-    nc++;
-  }
-  // 대표자도 같다면 생략?
-  if (Find({nowRow, nowCol}) != Find({nr, nc})) {
-    Union({nr, nc}, {nowRow, nowCol});
-  }
-  if (visit[nr][nc] != 0) return;
-  DFS(nr, nc);
-  // visit[nr][nc] = 1; // 질문 1. 미리 1처리 한 경우는 여기서 visit처리
+void dfs(int r, int c) {
+    visited[r][c] = true;
+
+    int nr = r, nc = c;
+    switch(b[r][c]) {
+        case 'U':
+            nr--;
+            break;
+        case 'D':
+            nr++;
+            break;
+        case 'L':
+            nc--;
+            break;
+        default:
+            nc++;
+    }
+
+    if(Find({r, c}) != Find({nr, nc})) {
+        Union({r, c}, {nr, nc});
+    }
+
+    if(visited[nr][nc]) {
+        return;
+    }
+
+    dfs(nr, nc);
 }
 
 int main() {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 
-  cin >> N >> M;
-  // 부모 배열 초기화
-  for (int i = 0; i < N; i++) {
-    for (int j = 0; j < M; j++) {
-      cin >> arr[i][j];
-      parent[i][j] = {i, j};
+    int n, m;
+    cin >> n >> m;
+
+    for(int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            cin >> b[i][j];
+            parent[i][j] = {i, j};
+        }
     }
-  }
-  for (int i = 0; i < N; i++) {
-    for (int j = 0; j < M; j++) {
-      if (visit[i][j] == 0) {
-        // visit[i][j] = 1;  질문 1. 미리 1처리하고 들어갔을때 메모리 초과남
-        DFS(i, j);
-      }
-      // 위랑 아래랑 시간 차이가 나는 이유(많이 차이나지는 않음)
-      // if (visit[i][j] != 0) continue;
-      // DFS(i, j);
+
+    for(int i = 1; i <= n; i++)  {
+        for(int j = 1; j <= m; j++) {
+            if(!visited[i][j]) {
+                dfs(i, j);
+            }
+        }
     }
-  }
 
-  for (int i = 0; i < N; i++) {
-    for (int j = 0; j < M; j++) {
-      cnt += (parent[i][j] == Node{i, j});
+    int ans = 0;
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= m; j++) {
+            ans += (parent[i][j] == make_pair(i, j));
+        }
     }
-  }
 
-  cout << cnt << '\n';
-
-  return 0;
+    cout << ans << '\n';
+    return 0;
 }
