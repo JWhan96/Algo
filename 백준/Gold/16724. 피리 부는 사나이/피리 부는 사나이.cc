@@ -37,7 +37,7 @@ void Union(Node A, Node B) {
 }
 
 void DFS(int nowRow, int nowCol) {
-  visit[nowRow][nowCol] = 1;
+  visit[nowRow][nowCol] = 1;  //  질문 1. 그게 아닌 경우에는 여기서 한번 처리
   char nowS = arr[nowRow][nowCol];
   int nr, nc;
   nr = nowRow;
@@ -51,11 +51,13 @@ void DFS(int nowRow, int nowCol) {
   } else if (nowS == 'R') {
     nc++;
   }
+  // 대표자도 같다면 생략?
   if (Find({nowRow, nowCol}) != Find({nr, nc})) {
     Union({nr, nc}, {nowRow, nowCol});
   }
   if (visit[nr][nc] != 0) return;
   DFS(nr, nc);
+  // visit[nr][nc] = 1; // 질문 1. 미리 1처리 한 경우는 여기서 visit처리
 }
 
 int main() {
@@ -73,8 +75,12 @@ int main() {
   for (int i = 0; i < N; i++) {
     for (int j = 0; j < M; j++) {
       if (visit[i][j] == 0) {
+        // visit[i][j] = 1;  질문 1. 미리 1처리하고 들어갔을때 메모리 초과남
         DFS(i, j);
       }
+      // 위랑 아래랑 시간 차이가 나는 이유(많이 차이나지는 않음)
+      // if (visit[i][j] != 0) continue;
+      // DFS(i, j);
     }
   }
 
