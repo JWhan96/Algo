@@ -6,13 +6,13 @@
 using namespace std;
 
 struct Edge {
-  int cost;
   int to;
+  int cost;
   bool operator<(Edge right) const {
     if (cost > right.cost) return false;
     if (cost < right.cost) return true;
-    if (to < right.to) return true;
-    if (to > right.to) return false;
+    if (to < right.to) return false;
+    if (to > right.to) return true;
     return false;
   }
 };
@@ -31,8 +31,8 @@ int main() {
   for (int i = 0; i < cntEdge; i++) {
     int from, to, cost;
     cin >> from >> to >> cost;
-    v[from].push_back({cost, to});
-    v[to].push_back({cost, from});
+    v[from].push_back({to, cost});
+    v[to].push_back({from, cost});
   }
 
   visit[stNode] = 1;
