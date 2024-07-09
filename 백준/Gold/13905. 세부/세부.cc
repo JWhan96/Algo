@@ -40,7 +40,7 @@ int main() {
     Edge nextEdge = v[stNode][i];
     pq.push(nextEdge);
   }
-  int sum = 0;
+
   while (!pq.empty()) {
     Edge nowEdge = pq.top();
     pq.pop();
@@ -48,7 +48,7 @@ int main() {
     int nowCost = nowEdge.cost;
     // if (visit[now] != 0) continue;
     visit[now] = 1;
-    sum += nowCost;
+
     if (nowCost <= result) result = nowCost;
     if (now == endNode) {
       cout << result;
@@ -61,6 +61,6 @@ int main() {
     }
   }
 
-  cout << sum;
+  cout << 0;
   return 0;
 }  // 1765
