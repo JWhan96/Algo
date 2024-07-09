@@ -11,8 +11,8 @@ struct Edge {
   bool operator<(Edge right) const {
     if (cost > right.cost) return false;
     if (cost < right.cost) return true;
-    if (to < right.to) return false;
-    if (to > right.to) return true;
+    if (to < right.to) return true;
+    if (to > right.to) return false;
     return false;
   }
 };
