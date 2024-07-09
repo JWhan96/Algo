@@ -46,7 +46,7 @@ int main() {
     pq.pop();
     int now = nowEdge.to;
     int nowCost = nowEdge.cost;
-    // if (visit[now] != 0) continue;
+    if (visit[now] != 0) continue;
     visit[now] = 1;
 
     if (nowCost <= result) result = nowCost;
