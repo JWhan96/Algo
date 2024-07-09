@@ -49,7 +49,7 @@ int main() {
     // if (visit[now] != 0) continue;
     visit[now] = 1;
     sum += nowCost;
-    if (nowCost < result) result = nowCost;
+    if (nowCost <= result) result = nowCost;
     if (now == endNode) {
       cout << result;
       return 0;
@@ -60,7 +60,7 @@ int main() {
       pq.push(nextEdge);
     }
   }
-  // cout << result;
-  cout << 0;
+
+  cout << sum;
   return 0;
 }  // 1765
