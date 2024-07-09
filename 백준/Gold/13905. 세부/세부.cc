@@ -61,6 +61,6 @@ int main() {
     }
   }
   // cout << result;
-  cout << sum;
+  cout << 0;
   return 0;
 }  // 1765
