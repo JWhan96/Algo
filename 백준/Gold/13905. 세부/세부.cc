@@ -9,11 +9,12 @@ struct Edge {
   int to;
   int cost;
   bool operator<(Edge right) const {
-    if (cost > right.cost) return false;
-    if (cost < right.cost) return true;
-    if (to < right.to) return false;
-    if (to > right.to) return true;
-    return false;
+    // if (cost > right.cost) return false;
+    // if (cost < right.cost) return true;
+    // if (to < right.to) return false;
+    // if (to > right.to) return true;
+    // return false;
+    return cost < right.cost;
   }
 };
 priority_queue<Edge> pq;
@@ -40,7 +41,6 @@ int main() {
     Edge nextEdge = v[stNode][i];
     pq.push(nextEdge);
   }
-
   while (!pq.empty()) {
     Edge nowEdge = pq.top();
     pq.pop();
@@ -48,8 +48,7 @@ int main() {
     int nowCost = nowEdge.cost;
     if (visit[now] != 0) continue;
     visit[now] = 1;
-
-    if (nowCost <= result) result = nowCost;
+    if (nowCost < result) result = nowCost;
     if (now == endNode) {
       cout << result;
       return 0;
@@ -60,7 +59,6 @@ int main() {
       pq.push(nextEdge);
     }
   }
-
   cout << 0;
   return 0;
-}  // 1765
+}
