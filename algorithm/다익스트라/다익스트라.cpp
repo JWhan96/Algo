@@ -126,13 +126,14 @@ void dijkstra_3(int st) {
     pq.pop();  // 4. now꺼내기
     int now = nowEdge.to;
     int nowCost = nowEdge.cost;
+    // 저장되어 있는 cost가 지금 cost보다 작으면 continue
     if (dist[now] < nowCost) continue;
 
     // 5. now->next를 찾기
     for (int i = 0; i < v[now].size(); i++) {
       Edge nextEdge = v[now][i];
-      int next = v[now][i].to;
-      int nextCost = v[now][i].cost;
+      int next = nextEdge.to;
+      int nextCost = nextEdge.cost;
 
       if (dist[next] <= dist[now] + nextCost) continue;
 
