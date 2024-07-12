@@ -37,7 +37,7 @@ int main() {
   for (int i = 0; i < cntEdge; i++) {
     int from, to, cost;
     cin >> from >> to >> cost;
-
+    if (arr[from] == arr[to]) continue;
     v[from].push_back({cost, to});
     v[to].push_back({cost, from});
   }
