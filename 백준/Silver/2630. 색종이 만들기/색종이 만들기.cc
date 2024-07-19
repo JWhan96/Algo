@@ -21,21 +21,9 @@ int main() {
       int a;
       cin >> a;
       arr[i][j] = a;
-      if (a == 1) {
-        cntB++;
-      } else {
-        cntW++;
-      }
     }
   }
-  if (cntB == N * N) {
-    cout << 0 << endl << 1;
-    return 0;
-  } else if (cntW == N * N) {
-    cout << 1 << endl << 0;
-    return 0;
-  }
-  int cutN = N / 2;
+  int cutN = N;
   // cout << cutN;
   while (cutN != 0) {
     for (int i = 0; i < N; i += cutN) {
