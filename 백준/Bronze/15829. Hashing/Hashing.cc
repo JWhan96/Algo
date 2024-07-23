@@ -14,12 +14,18 @@ int main() {
 
   cin >> N;
   cin >> s;
-  int sum = 0;
+  unsigned long long sum = 0;
+  unsigned long long c = 1;
   for (int i = 0; i < N; i++) {
     int a = s[i] - 'a' + 1;
-    sum += (a * pow(31, i));
+    if (i != 0) {
+      c *= 31;
+      c = c % 1234567891;
+    }
+    unsigned long long b = (a * c);
+    sum += b % 1234567891;
     // cout << sum << " ";
   }
-  cout << sum;
+  cout << sum % 1234567891;
   return 0;
 }
