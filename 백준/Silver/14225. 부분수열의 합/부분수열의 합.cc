@@ -3,11 +3,11 @@
 #include <vector>
 using namespace std;
 int N;
-
+int result[2000005];
 int main() {
   cin >> N;
   vector<int> arr(N);
-  set<int> result;
+  // set<int> result;
   for (int i = 0; i < N; i++) {
     cin >> arr[i];
   }
@@ -19,14 +19,22 @@ int main() {
         sum += arr[j];
       }
     }
-    result.insert(sum);
+    // result.insert(sum);
+    result[sum] = 1;
     // cout << sum << " ";
   }
-  int idx = 1;
-  while (result.find(idx) != result.end()) {
-    idx++;
+  // int idx = 1;
+  // while (result.find(idx) != result.end()) {
+  //   idx++;
+  // }
+  int r = 0;
+  for (int idx = 1; idx < 2000005; idx++) {
+    if (result[idx] == 0) {
+      r = idx;
+      break;
+    }
   }
-  cout << idx;
+  cout << r;
 
   return 0;
 }
