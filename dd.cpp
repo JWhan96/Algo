@@ -1,22 +1,18 @@
 #include <iostream>
 
-// gcd 함수 정의
-int gcd(int a, int b) {
-  while (b != 0) {
-    int temp = b;
-    b = a % b;
-    a = temp;
-  }
-  return a;
-}
+#define endl '\n'
+#define fastio             \
+  ios::sync_with_stdio(0); \
+  cin.tie(0);              \
+  cout.tie(0);
+
+using namespace std;
 
 int main() {
-  int x, y;
-  std::cout << "Enter two integers: ";
-  std::cin >> x >> y;
-
-  int result = gcd(x, y);
-  std::cout << "GCD(" << x << ", " << y << ") = " << result << std::endl;
-
-  return 0;
+  fastio;
+  int a = 3;
+  char aa = '0' + a;
+  char bb = '0' + a;
+  cout << aa << bb;
+  // 결과 33
 }
