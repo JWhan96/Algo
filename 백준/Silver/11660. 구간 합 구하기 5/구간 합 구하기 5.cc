@@ -1,48 +1,33 @@
 #include <iostream>
-#include <stack>
 #include <vector>
 
-#define endl '\n'
-#define fastio             \
-  ios::sync_with_stdio(0); \
-  cin.tie(0);              \
-  cout.tie(0);
+#define fastio ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
 using namespace std;
 
-int arr[1030][1030];
-int dp[1030][1030];
-int N, M;
 int main() {
-  fastio;
-  cin >> N >> M;
-  for (int i = 1; i <= N; i++) {
-    int sum = 0;
-    for (int j = 1; j <= N; j++) {
-      int num;
-      cin >> num;
-      arr[i][j] = num;
-      sum += num;
-      dp[i][j] = sum;
+    fastio;
+    int N, M;
+    cin >> N >> M;
+    
+    vector<vector<int>> arr(N + 1, vector<int>(N + 1, 0));
+    vector<vector<int>> prefix_sum(N + 1, vector<int>(N + 1, 0));
+    
+    // 배열 입력
+    for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
+            cin >> arr[i][j];
+            prefix_sum[i][j] = arr[i][j] + prefix_sum[i-1][j] + prefix_sum[i][j-1] - prefix_sum[i-1][j-1];
+        }
     }
-  }
-  for (int k = 0; k < M; k++) {
-    int r1, c1, r2, c2;
-    cin >> r1 >> c1 >> r2 >> c2;
-    int result = 0;
-    for (int i = r1; i <= r2; i++) {
-      result += dp[i][c2] - dp[i][c1 - 1];
+    
+    // 질의 처리
+    for (int i = 0; i < M; i++) {
+        int x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        int result = prefix_sum[x2][y2] - prefix_sum[x1-1][y2] - prefix_sum[x2][y1-1] + prefix_sum[x1-1][y1-1];
+        cout << result << '\n';
     }
-    cout << result << endl;
-  }
+    
+    return 0;
 }
-
-// 1 3 6 10
-// 12 15 19 24
-// 27 31 36 42
-// 46 51 57 64
-
-// 1 3 6 10
-// 2 5 9 14
-// 3 7 12 18
-// 4 9 15 22
