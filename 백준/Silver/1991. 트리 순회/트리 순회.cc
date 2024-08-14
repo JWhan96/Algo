@@ -22,28 +22,28 @@ void preorder(int st, const vector<vector<int>> v) {
   }
 }
 
-void midorder(int st, const vector<vector<int>> v) {
+void inorder(int st, const vector<vector<int>> v) {
   int left = v[st][0];
   int right = v[st][1];
   char q = st + 'A';
   if (left != -1) {
-    midorder(left, v);  // 왼쪽 자식이 있을 때만 재귀 호출
+    inorder(left, v);  // 왼쪽 자식이 있을 때만 재귀 호출
   }
   cout << q;
   if (right != -1) {
-    midorder(right, v);  // 오른쪽 자식이 있을 때만 재귀 호출
+    inorder(right, v);  // 오른쪽 자식이 있을 때만 재귀 호출
   }
 }
 
-void lastorder(int st, const vector<vector<int>> v) {
+void postorder(int st, const vector<vector<int>> v) {
   int left = v[st][0];
   int right = v[st][1];
   char q = st + 'A';
   if (left != -1) {
-    lastorder(left, v);  // 왼쪽 자식이 있을 때만 재귀 호출
+    postorder(left, v);  // 왼쪽 자식이 있을 때만 재귀 호출
   }
   if (right != -1) {
-    lastorder(right, v);  // 오른쪽 자식이 있을 때만 재귀 호출
+    postorder(right, v);  // 오른쪽 자식이 있을 때만 재귀 호출
   }
   cout << q;
 }
@@ -69,7 +69,7 @@ int main() {
   }
   preorder('A' - 'A', v);
   cout << endl;
-  midorder('A' - 'A', v);
+  inorder('A' - 'A', v);
   cout << endl;
-  lastorder('A' - 'A', v);
+  postorder('A' - 'A', v);
 }
