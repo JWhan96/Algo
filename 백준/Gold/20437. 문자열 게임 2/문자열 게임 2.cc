@@ -1,6 +1,8 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <climits>
 
 #define fastio             \
   ios::sync_with_stdio(0); \
@@ -16,47 +18,33 @@ int main() {
   fastio;
   cin >> T;
   for (int tc = 0; tc < T; tc++) {
-    int dat[200] = {
-        0,
-    };
     string s;
-    int num;
-    cin >> s >> num;
+    int k;
+    cin >> s >> k;
+
+    vector<int> pos[200];  // 각 문자의 위치들을 저장
 
     for (int i = 0; i < s.size(); i++) {
-      dat[s[i]]++;
+      pos[s[i]].push_back(i);
     }
-    int maxCnt = 0;
-    int minCnt = 1e9;
-    for (int i = 0; i < s.size(); i++) {
-      int compCnt = num;
-      if (dat[s[i]] >= num) {  // 적어도 그 개수만큼은 있어야 시작
-        int cnt = 0;
-        char comp = s[i];
 
-        for (int j = i; j < s.size(); j++) {
-          cnt++;
-          if (s[j] == comp) {
-            compCnt--;
-            if (compCnt == 0) {
-              // dat[s[i]]--;
-              if (cnt > maxCnt) {
-                maxCnt = cnt;
-              }
-              if (cnt < minCnt) {
-                minCnt = cnt;
-              }
+    int maxLen = 0;
+    int minLen = INT_MAX;
 
-              break;
-            }
-          }
+    for (int i = 0; i < 200; i++) {
+      if (pos[i].size() >= k) {
+        for (int j = 0; j <= pos[i].size() - k; j++) {
+          int length = pos[i][j + k - 1] - pos[i][j] + 1;
+          minLen = min(minLen, length);
+          maxLen = max(maxLen, length);
         }
       }
     }
-    if (maxCnt == 0 && minCnt == 1e9) {
+
+    if (maxLen == 0 && minLen == INT_MAX) {
       cout << -1 << endl;
     } else {
-      cout << minCnt << " " << maxCnt << endl;
+      cout << minLen << " " << maxLen << endl;
     }
   }
 }
