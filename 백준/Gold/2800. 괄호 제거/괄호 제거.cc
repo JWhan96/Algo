@@ -3,6 +3,7 @@
 #include <stack>
 #include <string>
 #include <vector>
+#include <set>
 #define fastio             \
   ios::sync_with_stdio(0); \
   cin.tie(0);              \
@@ -33,12 +34,10 @@ int main() {
       arr[idx].push_back(i);
     }
   }
-  
   vector<int> idxarr;
   for (int i = 1; i <= cnt; i++) {
     idxarr.push_back(i);
   }
-  
   vector<vector<int>> div;
   for (int i = 0; i < (1 << cnt); i++) {
     vector<int> a;
@@ -49,35 +48,29 @@ int main() {
     }
     div.push_back(a);
   }
-  
-  vector<vector<char>> result;
+
+  // result를 set으로 변경
+  set<vector<char>> result;
   for (int i = 1; i < (1 << cnt); i++) {
     vector<char> cop = v;
-    vector<int> toRemove;
-
+    vector<int> eraseidx;
     for (int j = 0; j < div[i].size(); j++) {
-      toRemove.push_back(arr[div[i][j]][0]); // 여는 괄호
-      toRemove.push_back(arr[div[i][j]][1]); // 닫는 괄호
+      eraseidx.push_back(arr[div[i][j]][0]);
+      eraseidx.push_back(arr[div[i][j]][1]);
+    }
+    sort(eraseidx.rbegin(), eraseidx.rend());
+    for (int j = 0; j < eraseidx.size(); j++) {
+      cop.erase(cop.begin() + eraseidx[j]);
     }
 
-    sort(toRemove.rbegin(), toRemove.rend()); // 내림차순으로 정렬
-
-    for (int idx : toRemove) {
-      cop.erase(cop.begin() + idx);
-    }
-
-    result.push_back(cop);
+    result.insert(cop); // set에 삽입
   }
 
-  sort(result.begin(), result.end());
-  result.erase(unique(result.begin(), result.end()), result.end());
-
-  for (auto a : result) {
-    for (int i = 0; i < a.size(); i++) {
-      cout << a[i];
+  // set에 저장된 결과를 출력
+  for (const auto& a : result) {
+    for (char c : a) {
+      cout << c;
     }
     cout << endl;
   }
-
-  return 0;
 }
