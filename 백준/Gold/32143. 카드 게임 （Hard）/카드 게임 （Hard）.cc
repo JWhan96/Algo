@@ -49,9 +49,10 @@ int main() {
     int num;
     cin >> num;
     sum += num;
+    // ms.insert(num); // 다 넣으면 그만큼 시간 더걸림
 
     if (result.first != -1) {
-      if (result.second >= num) {  // 같은경우도 넣나...?
+      if (result.second >= num) { 
         cout << result.first << endl;
       } else {
         ms.insert(num);
