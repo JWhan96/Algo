@@ -1,9 +1,6 @@
-#include <algorithm>
 #include <iostream>
 #include <queue>
-#include <set>
 #include <vector>
-
 #define fastio             \
   ios::sync_with_stdio(0); \
   cin.tie(0);              \
@@ -12,85 +9,54 @@
 
 using namespace std;
 
-int N, M;
-int heal;
+typedef long long ll;
+
+void push(int x, int heal, ll &sum,
+          priority_queue<int, vector<int>, greater<int>> &pq) {
+  if (sum < heal) {
+    sum += x;
+    pq.push(x);
+  } else if (x > pq.top()) {
+    sum += x;
+    pq.push(x);
+    while (sum - pq.top() >= heal) {
+      sum -= pq.top();
+      pq.pop();
+    }
+  }
+}
 
 int main() {
   fastio;
+  int heal;
   cin >> heal;
+  int N, M;
   cin >> N >> M;
-  pair<int, int> result = {-1, 0};
-  long long sum = 0;
-  multiset<int, greater<int>> ms;
-  for (int i = 0; i < N; i++) {
-    int num;
-    cin >> num;
-    ms.insert(num);
-    sum += num;
+  ll sum = 0;
+  priority_queue<int, vector<int>, greater<int>> pq;
+  // auto push = [&](int x) {
+  //   if (sum < heal) {
+  //     sum += x;
+  //     pq.push(-x);
+  //   } else if (x > -pq.top()) {
+  //     sum += x;
+  //     pq.push(-x);
+  //     while (sum - -pq.top() >= heal) {
+  //       sum -= -pq.top();
+  //       pq.pop();
+  //     }
+  //   }
+  // };
+  while (N--) {
+    int x;
+    cin >> x;
+    push(x, heal, sum, pq);
   }
-  if (sum < heal) {
-    cout << -1 << endl;
-  } else {
-    int h1 = 0;
-    int c1 = 0;
-    int r1 = 0;
-    for (auto a : ms) {
-      h1 += a;
-      c1++;
-      if (h1 >= heal) {
-        r1 = a;
-        result = {c1, r1};
-        break;
-      }
-    }
-    cout << result.first << endl;
+  cout << (sum >= heal ? (int)pq.size() : -1) << '\n';
+  while (M--) {
+    int x;
+    cin >> x;
+    push(x, heal, sum, pq);
+    cout << (sum >= heal ? (int)pq.size() : -1) << '\n';
   }
-  for (int i = 0; i < M; i++) {
-    int num;
-    cin >> num;
-    sum += num;
-    // ms.insert(num); // 다 넣으면 그만큼 시간 더걸림
-
-    if (result.first != -1) {
-      if (result.second >= num) { 
-        cout << result.first << endl;
-      } else {
-        ms.insert(num);
-        int h1 = 0;
-        int c1 = 0;
-        int r1 = 0;
-        for (auto a : ms) {
-          h1 += a;
-          c1++;
-          if (h1 >= heal) {
-            r1 = a;
-            result = {c1, r1};
-            break;
-          }
-        }
-        cout << result.first << endl;
-      }
-    } else {
-      ms.insert(num);
-      if (sum < heal) {
-        cout << -1 << endl;
-      } else {
-        int h1 = 0;
-        int c1 = 0;
-        int r1 = 0;
-        for (auto a : ms) {
-          h1 += a;
-          c1++;
-          if (h1 >= heal) {
-            r1 = a;
-            result = {c1, r1};
-            break;
-          }
-        }
-        cout << result.first << endl;
-      }
-    }
-  }
-
-  // cout << result.first << " " << result.second;
 }
