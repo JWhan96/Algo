@@ -1,56 +1,61 @@
+#include <algorithm>
 #include <iostream>
+#include <vector>
+#define endl '\n'
+#define fastio             \
+  ios::sync_with_stdio(0); \
+  cin.tie(0);              \
+  cout.tie(0);
+
 using namespace std;
 
 int N;
-int S[20][20];
-int selected[20] = {0, };
-int minDiff = 99999999;
-
-void calculateSkill() {
-    int skillA = 0; // A팀(selectTeam 함수에서 뽑힌 사람들로 구성)의 능력 치
-    int skillB = 0; // B팀(나머지 사람들로 구성)의 능력치
-
-    for (int i=0; i<N; i++) {
-        for (int j=0; j<N; j++) {
-            if (selected[i] && selected[j]) {
-                skillA += S[i][j];
-            }
-            else if (!selected[i] && !selected[j]) {
-                skillB += S[i][j];
-            }
-        }
-    }
-
-    int diff = skillA >= skillB ? skillA - skillB : skillB - skillA;
-    if (diff < minDiff) {
-        minDiff = diff;
-    }
-}
-
-// 두 팀으로 나누는 것이므로 한 팀을 다 뽑으면 다른 팀은 알아서 구성됨
-void selectTeam(int count, int idx) { // count: 뽑힌 사람의 수, idx: 다음 탐색 시작 값
-    if (count == N/2) { // N/2명으로 이루어진 팀이 나누어진 경우
-        calculateSkill(); // 각 팀의 능력치 계산 후 능력치 차이의 최솟값 업데이트
-    }
-
-    for (int i=idx; i<N; i++) {
-        selected[i] = true;
-        selectTeam(count+1, i+1);
-        selected[i] = false; // 복원
-    }
-}
 
 int main() {
-    scanf("%d", &N);
-    for (int i=0; i<N; i++) {
-        for (int j=0; j<N; j++) {
-            scanf("%d", &S[i][j]);
-        }
+  fastio;
+  cin >> N;
+  vector<vector<int>> arr(N, vector<int>(N, 0));
+  vector<int> idx;
+  int cnt = N / 2;
+  for (int i = 0; i < N; i++) {
+    idx.push_back(i);
+    for (int j = 0; j < N; j++) {
+      cin >> arr[i][j];
+    }
+  }
+  vector<bool> check(N);
+
+  // 팀 구성의 첫 번째 사람을 무조건 A팀에 포함
+  fill(check.begin(), check.begin() + cnt, true);
+  int mindiff = 1e9;
+  do {
+    if (!check[0]) break; // 첫 번째 인덱스가 A팀에 있지 않으면 더 이상 볼 필요 없음
+
+    int a = 0;
+    int b = 0;
+    vector<int> teamA(N);
+    for (int i = 0; i < N; i++) {
+      if (check[i]) {
+        teamA[i] = 1;
+      }
     }
 
-    selectTeam(0, 0);
+    for (int i = 0; i < N; i++) {
+      for (int j = 0; j < N; j++) {
+        if (teamA[i] && teamA[j]) {
+          a += arr[i][j];
+        } else if (!teamA[i] && !teamA[j]) {
+          b += arr[i][j];
+        }
+      }
+    }
 
-    printf("%d", minDiff);
-    
-    return 0;
+    int diff = abs(a - b);
+    if (diff < mindiff) {
+      mindiff = diff;
+    }
+
+  } while (prev_permutation(check.begin(), check.end()));
+
+  cout << mindiff;
 }
