@@ -1,47 +1,53 @@
+#include <algorithm>
 #include <iostream>
 #include <queue>
-using namespace std;
+#define endl '\n'
+#define fastio             \
+  ios::sync_with_stdio(0); \
+  cin.tie(0);              \
+  cout.tie(0);
 
+using namespace std;
+typedef long long ll;
+struct Node{
+  int floor;
+  int cnt;
+};
 int F, S, G, U, D;
 bool visit[1000001];
 
-int BFS() {
-    queue<pair<int, int>> q;
-    q.push({S, 0});
-    visit[S] = true;
-
-    while (!q.empty()) {
-        int curFloor = q.front().first;
-        int curCnt = q.front().second;
-        q.pop();
-
-        if (curFloor == G) {
-            return curCnt;
-        }
-
-        // 위로 올라가는 경우
-        if (curFloor + U <= F && !visit[curFloor + U]) {
-            q.push({curFloor + U, curCnt + 1});
-            visit[curFloor + U] = true;
-        }
-
-        // 아래로 내려가는 경우
-        if (curFloor - D >= 1 && !visit[curFloor - D]) {
-            q.push({curFloor - D, curCnt + 1});
-            visit[curFloor - D] = true;
-        }
-    }
-
-    return -1;
-}
-
 int main() {
-    cin >> F >> S >> G >> U >> D;
-    int result = BFS();
-    
-    if (result == -1) {
-        cout << "use the stairs" << endl;
-    } else {
-        cout << result << endl;
+  fastio;
+  cin >> F >> S >> G >> U >> D;
+  queue<Node> q;
+  q.push({S, 0});
+  visit[S] = 1;
+  int result = 0;
+  while(!q.empty()){
+    Node now = q.front();
+    q.pop();
+    int nowF = now.floor;
+    int nowC = now.cnt;
+    if(nowF == G){
+      result = nowC;
+      break;
+    } 
+    if(nowF + U <= F && visit[nowF+U] ==0){
+      q.push({nowF + U, nowC +1});
+      visit[nowF + U] = 1;
     }
+    if(nowF - D >= 1 && visit[nowF -D] == 0){
+      q.push({nowF -D, nowC +1});
+      visit[nowF -D] = 1;
+    }
+
+  }
+
+  if(visit[G] == 1){
+    cout << result << endl;
+  }else{
+    cout << "use the stairs" << endl;
+  }
+
+ 
 }
