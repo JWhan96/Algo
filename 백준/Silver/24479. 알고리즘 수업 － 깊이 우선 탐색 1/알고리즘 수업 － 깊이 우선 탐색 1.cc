@@ -20,9 +20,9 @@ void dfs(int st) {
   visit[st] = cnt++; // 현재 노드를 방문 순서로 기록
   for (int i = 0; i < v[st].size(); i++) {
     int to = v[st][i];
-    if (visit[to] == 0) { // 아직 방문하지 않았다면
-      dfs(to);
-    }
+    if (visit[to] != 0) continue; // 아직 방문하지 않았다면
+    dfs(to);
+    
   }
   return;
 }
