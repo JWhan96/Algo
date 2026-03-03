@@ -17,7 +17,7 @@ find . -type f -name "*.exe" -exec rm -f {} \;
 echo "==== git add ===="
 git add .
 
-COMMIT_DATE=$(date "+%Y-%m-%d")
+COMMIT_DATE=$(date "+%Y-%m-%d %H:%M:%S")
 COMMIT_MSG="${COMMIT_DATE}"
 
 echo "==== git commit ===="
