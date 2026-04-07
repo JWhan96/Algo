@@ -19,15 +19,18 @@ int main() {
   cin >> X;
 
   for (int i = 0; i < N; i++) {
-    if (m[arr[i]] == 0) continue;
-    if (m.count(X - arr[i]) == 0 || m[X - arr[i]] == 0) continue;
-    if (arr[i] == X - arr[i]) {
-      cnt += m[arr[i]] * (m[arr[i]] - 1) / 2;
-      m[arr[i]] = 0;
-    } else {
-      cnt += m[arr[i]] * m[X - arr[i]];
-      m[arr[i]] = 0;
-      m[X - arr[i]] = 0;
+    if (m[arr[i]] == 0)
+      continue;
+    else {
+      if (m[X - arr[i]] == 0) continue;
+      if (arr[i] == (X - arr[i])) {
+        cnt += m[arr[i]] * (m[arr[i]] - 1) / 2;
+        m[arr[i]] = 0;
+      } else {
+        cnt += m[arr[i]] * m[X - arr[i]];
+        m[arr[i]] = 0;
+        m[X - arr[i]] = 0;
+      }
     }
   }
 
