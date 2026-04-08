@@ -6,23 +6,30 @@ using namespace std;
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
+  // N: 학생수, K :한방 최대 인원, 0여, 1남
+  int N, K;
+  cin >> N >> K;
 
-  int arrA[26] = {};
-  int arrB[26] = {};
-
-  string a, b;
-  cin >> a >> b;
-
-  for (auto aa : a) arrA[aa - 'a']++;
-  for (auto bb : b) arrB[bb - 'a']++;
+  // 성별, 학년
+  int arr[2][7] = {};
+  for (int i = 0; i < N; i++) {
+    int sex, grade;
+    cin >> sex >> grade;
+    arr[sex][grade]++;
+  }
 
   int cnt = 0;
+  for (int i = 1; i < 7; i++) {
+    if ((arr[0][i] % K) == 0) {
+      cnt += arr[0][i] / K;
+    } else if ((arr[0][i] % K) != 0) {
+      cnt += (arr[0][i] / K) + 1;
+    }
 
-  for (int i = 0; i < 26; i++) {
-    if (arrA[i] == arrB[i])
-      continue;
-    else {
-      cnt += abs(arrA[i] - arrB[i]);
+    if ((arr[1][i] % K) == 0) {
+      cnt += (arr[1][i] / K);
+    } else if ((arr[1][i] % K) != 0) {
+      cnt += (arr[1][i] / K) + 1;
     }
   }
 
