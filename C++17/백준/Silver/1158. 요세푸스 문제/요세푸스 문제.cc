@@ -1,34 +1,43 @@
-// Authored by : seondal
-// Co-authored by : BaaaaaaaaaaarkingDog
-// http://boj.kr/7c7efdecb02a48a3a94ade53e278b0bc
 #include <bits/stdc++.h>
+
 using namespace std;
 
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
-    
-  int n,k;
-  cin >> n >> k; 
-  vector <int> V, ans;
-  for (int i = 1; i <= n; i++)
-    V.push_back(i);
 
-  for (int i = 0; ans.size() < n; i++){ //정답벡터에 n개의 원소가 쌓이면 종료
-    if(i % k == k-1) ans.push_back(V[i]); // k번째 사람일 때 
-    else V.push_back(V[i]);
+  int N, K;
+  cin >> N >> K;
+  list<int> l;
+  for (int i = 1; i <= N; i++) {
+    l.push_back(i);
   }
+  // 첫 시작
+  auto cur = l.begin();
+  // list가 빌때까지
+  cout << '<';
+  while (!l.empty()) {
+    for (int i = 0; i < K - 1; i++) {
+      if (cur == l.end()) {
+        cur = l.begin();
+      }
+      cur++;
+      if (cur == l.end()) {
+        cur = l.begin();
+      }
+    }
 
-  cout << "<";
-  for(int i = 0; i < n; i++){
-    if(i == n-1) cout << ans[i]; //마지막 요소는 콤마 없이 출력
-    else cout << ans[i] << ", ";
+    int a = *cur;
+
+    cur = l.erase(cur);
+    if (l.size() != 0) {
+      cout << a << ", ";
+
+    } else {
+      cout << a;
+    }
   }
-  cout << ">";
+  cout << '>';
+
+  return 0;
 }
-
-/*
-STL vector을 이용한 풀이. 매 순간 아직 제거되지 않은 원소는 제일 뒤로 보내고(V.push_back(V[i]))
-제거되는 원소는 ans에 저장하고 있다가 ans가 다 채워지면 출력. 공간 복잡도가 O(K*N + N)이라는
-단점이 있음.
-*/
